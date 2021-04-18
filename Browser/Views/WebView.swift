@@ -49,6 +49,11 @@ class WebView: UIView {
         return view
     }()
     
+    let progressView: UIProgressView = {
+        let progress = UIProgressView()
+        return progress
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -57,6 +62,7 @@ class WebView: UIView {
         addSubview(adressField)
         addSubview(backButton)
         addSubview(forwardButton)
+        addSubview(progressView)
         
         setNeedsUpdateConstraints()
     }
@@ -95,6 +101,12 @@ class WebView: UIView {
             make.centerY.equalTo(adressField)
             make.right.equalToSuperview()
             make.left.equalTo(adressField.snp.right)
+        }
+        
+        progressView.snp.makeConstraints { (make) in
+            make.left.right.equalToSuperview()
+            make.bottom.equalTo(topView.snp.bottom)
+            make.height.equalTo(2.0)
         }
     }
     

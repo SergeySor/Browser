@@ -20,6 +20,7 @@ class WebViewController: UIViewController, WKUIDelegate {
     private var observationURL: NSKeyValueObservation?
     private var observationGoBack: NSKeyValueObservation?
     private var observationGoForward: NSKeyValueObservation?
+    private var observationProgress: NSKeyValueObservation?
     
     override func loadView() {
         view = WebView()
@@ -59,6 +60,10 @@ extension WebViewController {
         
         observationGoForward = observe(\.mainView.webView.canGoForward, changeHandler: { _, _ in
             self.mainView.forwardButton.isEnabled = self.mainView.webView.canGoForward
+        })
+        
+        observationProgress = observe(\.mainView.webView.estimatedProgress, changeHandler: { _, _ in
+            self.mainView.progressView.progress = Float(self.mainView.webView.estimatedProgress)
         })
     }
     

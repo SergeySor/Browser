@@ -103,7 +103,7 @@ extension HistoryViewController: UITableViewDataSource {
         let cell = mainView.tableView.dequeueReusableCell(withIdentifier: "outh", for: indexPath)
         
         cell.textLabel?.text = visits[indexPath.row].url
-        cell.textLabel?.textColor = .white
+        cell.textLabel?.textColor = UIColor(named: "themeColor")
         
         return cell
     }

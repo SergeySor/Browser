@@ -9,15 +9,15 @@ import Foundation
 import UIKit
 import WebKit
 
-class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
+class WebViewController: UIViewController, WKUIDelegate {
     
-    private var mainView: WebView {
+    @objc private var mainView: WebView {
         return view as! WebView
     }
     
     weak var historyDelegate: HistoryDelegate!
     
-    var titlesArray = [String]()
+    private var observation: NSKeyValueObservation?
     
     override func loadView() {
         view = WebView()
@@ -29,29 +29,40 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        observation = observe(\.mainView.webView.url, options: [.old, .new]) { (object, change) in
+            self.mainView.adressField.text = self.mainView.webView.url?.absoluteString
+        }
+        
+        goToFirstPage()
+        
+        mainView.adressField.addTarget(self, action: #selector(goToPage), for: .editingDidEnd)
+        
+        mainView.backButton.addTarget(self, action: #selector(customGoBack), for: .touchUpInside)
+        
+        mainView.forwardButton.addTarget(self, action: #selector(customGoForward), for: .touchUpInside)
+        
+        mainView.adressField.delegate = self
+    }
+    
+    func goToFirstPage() {
+        
         let myUrl = URL(string: "https://www.google.ru/")
         let myRequest = URLRequest(url: myUrl!)
         mainView.webView.load(myRequest)
-        
-        mainView.backButton.addTarget(self, action: #selector(customGoBack), for: .touchUpInside)
     }
     
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        if let title = webView.title {
-            titlesArray.append(title)
-            updateTitle()
+    @objc func goToPage(sender: UITextField) {
+        if sender.text!.isEmpty {
+            goToFirstPage()
+        } else {
+            if let myUrl = URL(string: sender.text!) {
+                let myRequest = URLRequest(url: myUrl)
+                mainView.webView.load(myRequest)
+            } else {
+                mainView.webView.reload()
+            }
         }
     }
-    
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-            if navigationAction.navigationType == WKNavigationType.linkActivated {
-                if let url = navigationAction.request.url {
-                    mainView.webView.load(URLRequest(url: url))
-                    historyDelegate.addPage(url: url.absoluteString)
-                }
-            }
-        decisionHandler(.allow)
-     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -67,14 +78,42 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
         if mainView.webView.canGoBack {
             print("Can go back")
             mainView.webView.goBack()
-            titlesArray.removeLast()
-            updateTitle()
         } else {
             print("Can't go back")
         }
     }
     
-    func updateTitle() {
-        mainView.adressField.text = titlesArray.last
+    @objc func customGoForward(sender: UIButton) {
+        if mainView.webView.canGoForward {
+            print("Can go forward")
+            mainView.webView.goForward()
+        } else {
+            print("Can't go forward")
+        }
+    }
+}
+
+//MARK: WKNavigationDelegate
+
+extension WebViewController: WKNavigationDelegate {
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+            if navigationAction.navigationType == WKNavigationType.linkActivated {
+                if let url = navigationAction.request.url {
+                    mainView.webView.load(URLRequest(url: url))
+                    historyDelegate.addPage(url: url.absoluteString)
+                }
+            }
+        decisionHandler(.allow)
+     }
+}
+
+extension WebViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == mainView.adressField {
+            textField.resignFirstResponder()
+            return false
+        }
+        return true
     }
 }

@@ -12,20 +12,27 @@ import WebKit
 
 class WebView: UIView {
     
-    let webView: WKWebView = {
+    @objc dynamic let webView: WKWebView = {
         let view = WKWebView()
         return view
     }()
     
     let topView: UIView = {
         let view = UIView()
-        view.backgroundColor = .darkGray
+        view.backgroundColor = .systemBackground
+        view.addLine(position: .bottom, color: UIColor(named: "themeColor")!, width: 0.5)
         return view
     }()
     
     let backButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
+        return button
+    }()
+    
+    let forwardButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "chevron.forward"), for: .normal)
         return button
     }()
     
@@ -36,6 +43,7 @@ class WebView: UIView {
         view.textColor = .white
         view.textAlignment = .center
         view.borderStyle = .roundedRect
+        view.enablesReturnKeyAutomatically = true
         return view
     }()
     
@@ -46,6 +54,7 @@ class WebView: UIView {
         addSubview(webView)
         addSubview(adressField)
         addSubview(backButton)
+        addSubview(forwardButton)
         
         setNeedsUpdateConstraints()
     }
@@ -79,5 +88,12 @@ class WebView: UIView {
             make.left.equalToSuperview()
             make.right.equalTo(adressField.snp.left)
         }
+        
+        forwardButton.snp.makeConstraints { (make) in
+            make.centerY.equalTo(adressField)
+            make.right.equalToSuperview()
+            make.left.equalTo(adressField.snp.right)
+        }
     }
+    
 }

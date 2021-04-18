@@ -12,6 +12,7 @@
 		FB1FDDBD2614B516008F71ED /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1FDDBC2614B516008F71ED /* HistoryView.swift */; };
 		FB1FDDC52614BA87008F71ED /* HistoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1FDDC42614BA87008F71ED /* HistoryDelegate.swift */; };
 		FB1FDDCE2614FFCD008F71ED /* Visit.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1FDDCD2614FFCD008F71ED /* Visit.swift */; };
+		FB2EA3A9262C73AA002447AC /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB2EA3A8262C73AA002447AC /* UIViewExtensions.swift */; };
 		FBBE214B26134BE6003DBAF3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBBE214A26134BE6003DBAF3 /* AppDelegate.swift */; };
 		FBBE214D26134BE6003DBAF3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBBE214C26134BE6003DBAF3 /* SceneDelegate.swift */; };
 		FBBE215426134BE7003DBAF3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FBBE215326134BE7003DBAF3 /* Assets.xcassets */; };
@@ -29,6 +30,7 @@
 		FB1FDDBC2614B516008F71ED /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		FB1FDDC42614BA87008F71ED /* HistoryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDelegate.swift; sourceTree = "<group>"; };
 		FB1FDDCD2614FFCD008F71ED /* Visit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Visit.swift; sourceTree = "<group>"; };
+		FB2EA3A8262C73AA002447AC /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		FBBE214726134BE6003DBAF3 /* Browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Browser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBBE214A26134BE6003DBAF3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FBBE214C26134BE6003DBAF3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -104,6 +106,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		FB2EA3A7262C7391002447AC /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				FB2EA3A8262C73AA002447AC /* UIViewExtensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		FBBE213E26134BE6003DBAF3 = {
 			isa = PBXGroup;
 			children = (
@@ -125,6 +135,7 @@
 		FBBE214926134BE6003DBAF3 /* Browser */ = {
 			isa = PBXGroup;
 			children = (
+				FB2EA3A7262C7391002447AC /* Extensions */,
 				FB1FDDCC2614FFC0008F71ED /* Models */,
 				FB1FDDC32614BA65008F71ED /* Protocols */,
 				FB1FDDBB2614B4E8008F71ED /* ViewControllers */,
@@ -257,6 +268,7 @@
 				FBBE214B26134BE6003DBAF3 /* AppDelegate.swift in Sources */,
 				FBBE216626138D4B003DBAF3 /* WebView.swift in Sources */,
 				FB1FDDC52614BA87008F71ED /* HistoryDelegate.swift in Sources */,
+				FB2EA3A9262C73AA002447AC /* UIViewExtensions.swift in Sources */,
 				FBBE216326134F7E003DBAF3 /* WebViewController.swift in Sources */,
 				FB1FDDB82614B472008F71ED /* HistoryViewController.swift in Sources */,
 				FBBE214D26134BE6003DBAF3 /* SceneDelegate.swift in Sources */,

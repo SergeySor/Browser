@@ -13,13 +13,14 @@ class HistoryView: UIView {
     
     let topView: UIView = {
         let view = UIView()
-        view.backgroundColor = .darkGray
+        view.backgroundColor = .systemBackground
+        view.addLine(position: .bottom, color: UIColor(named: "themeColor")!, width: 0.5)
         return view
     }()
     
     let header: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = UIColor(named: "themeColor")
         label.textAlignment = .center
         return label
     }()

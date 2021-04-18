@@ -64,8 +64,11 @@ extension WebViewController {
         
         observationProgress = observe(\.mainView.webView.estimatedProgress, changeHandler: { _, _ in
             let progress = Float(self.mainView.webView.estimatedProgress)
-            
-            self.mainView.progressView.progress = progress
+            if progress == 1.0 {
+                self.mainView.progressView.progress = 0.0
+            } else {
+                self.mainView.progressView.progress = progress
+            }
         })
     }
     

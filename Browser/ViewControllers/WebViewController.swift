@@ -21,13 +21,14 @@ class WebViewController: UIViewController, WKUIDelegate {
     
     override func loadView() {
         view = WebView()
-        
-        mainView.webView.uiDelegate = self
-        mainView.webView.navigationDelegate = self
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        mainView.webView.uiDelegate = self
+        mainView.webView.navigationDelegate = self
+        mainView.adressField.delegate = self
         
         observation = observe(\.mainView.webView.url, options: [.old, .new]) { (object, change) in
             self.mainView.adressField.text = self.mainView.webView.url?.absoluteString
@@ -41,7 +42,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         
         mainView.forwardButton.addTarget(self, action: #selector(customGoForward), for: .touchUpInside)
         
-        mainView.adressField.delegate = self
+        
     }
     
     func goToFirstPage() {
@@ -67,11 +68,6 @@ class WebViewController: UIViewController, WKUIDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     @objc func customGoBack(sender: UIButton) {
@@ -107,6 +103,8 @@ extension WebViewController: WKNavigationDelegate {
         decisionHandler(.allow)
      }
 }
+
+//MARK: UITextFieldDelegate
 
 extension WebViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

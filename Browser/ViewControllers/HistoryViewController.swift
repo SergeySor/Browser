@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import RealmSwift
 
-class HistoryViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, HistoryDelegate {
+class HistoryViewController: UIViewController, HistoryDelegate {
     
     private var mainView: HistoryView {
         return view as! HistoryView
@@ -35,28 +35,6 @@ class HistoryViewController: UIViewController, UITableViewDataSource, UITableVie
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return visits.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = mainView.tableView.dequeueReusableCell(withIdentifier: "outh", for: indexPath)
-        
-        cell.textLabel?.text = visits[indexPath.row].url
-        cell.textLabel?.textColor = .white
-        
-        return cell
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
     
     func addPage(url: String) {
         let newVisit = Visit()
@@ -80,6 +58,22 @@ class HistoryViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
+    func handleMoveToTrash(index: IndexPath) {
+        do {
+            realm.beginWrite()
+            realm.delete(visits.remove(at: index.row))
+            try realm.commitWrite()
+            mainView.tableView.deleteRows(at: [index], with: .fade)
+        } catch {
+            print("can't delete")
+        }
+    }
+}
+
+//MARK: UITableViewDelegate
+
+extension HistoryViewController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let trash = UIContextualAction(style: .destructive, title: "Trash") { [weak self] (action, view, completionHandler) in
             self?.handleMoveToTrash(index: indexPath)
@@ -90,16 +84,26 @@ class HistoryViewController: UIViewController, UITableViewDataSource, UITableVie
         let configuration = UISwipeActionsConfiguration(actions: [trash])
         return configuration
     }
-    
-    func handleMoveToTrash(index: IndexPath) {
-        do {
-        realm.beginWrite()
-        realm.delete(visits.remove(at: index.row))
-        try realm.commitWrite()
-        mainView.tableView.deleteRows(at: [index], with: .fade)
-        } catch {
-            print("can't delete")
-        }
-    }
+}
 
+//MARK: UITableViewDataSource
+
+extension HistoryViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return visits.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = mainView.tableView.dequeueReusableCell(withIdentifier: "outh", for: indexPath)
+        
+        cell.textLabel?.text = visits[indexPath.row].url
+        cell.textLabel?.textColor = .white
+        
+        return cell
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
 }

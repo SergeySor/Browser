@@ -27,11 +27,13 @@ class WebView: UIView {
     let backButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
+        button.isEnabled = false
         return button
     }()
     
     let forwardButton: UIButton = {
         let button = UIButton()
+        button.isEnabled = false
         button.setImage(UIImage(systemName: "chevron.forward"), for: .normal)
         return button
     }()

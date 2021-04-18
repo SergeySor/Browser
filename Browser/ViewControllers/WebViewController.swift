@@ -17,7 +17,9 @@ class WebViewController: UIViewController, WKUIDelegate {
     
     weak var historyDelegate: HistoryDelegate!
     
-    private var observation: NSKeyValueObservation?
+    private var observationURL: NSKeyValueObservation?
+    private var observationGoBack: NSKeyValueObservation?
+    private var observationGoForward: NSKeyValueObservation?
     
     override func loadView() {
         view = WebView()
@@ -30,20 +32,49 @@ class WebViewController: UIViewController, WKUIDelegate {
         mainView.webView.navigationDelegate = self
         mainView.adressField.delegate = self
         
-        observation = observe(\.mainView.webView.url, options: [.old, .new]) { (object, change) in
+        initObservations()
+        initActions()
+        goToFirstPage()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+}
+
+//MARK: Setup
+
+extension WebViewController {
+    
+    func initObservations() {
+        
+        observationURL = observe(\.mainView.webView.url) { _, _ in
             self.mainView.adressField.text = self.mainView.webView.url?.absoluteString
         }
         
-        goToFirstPage()
+        observationGoBack = observe(\.mainView.webView.canGoBack, changeHandler: { _, _ in
+            self.mainView.backButton.isEnabled = self.mainView.webView.canGoBack
+        })
+        
+        observationGoForward = observe(\.mainView.webView.canGoForward, changeHandler: { _, _ in
+            self.mainView.forwardButton.isEnabled = self.mainView.webView.canGoForward
+        })
+    }
+    
+    func initActions() {
         
         mainView.adressField.addTarget(self, action: #selector(goToPage), for: .editingDidEnd)
         
         mainView.backButton.addTarget(self, action: #selector(customGoBack), for: .touchUpInside)
         
         mainView.forwardButton.addTarget(self, action: #selector(customGoForward), for: .touchUpInside)
-        
-        
     }
+}
+
+//MARK: Navigation actions
+
+extension WebViewController {
     
     func goToFirstPage() {
         
@@ -63,11 +94,6 @@ class WebViewController: UIViewController, WKUIDelegate {
                 mainView.webView.reload()
             }
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
     @objc func customGoBack(sender: UIButton) {

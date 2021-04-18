@@ -35,6 +35,11 @@ class HistoryViewController: UIViewController, HistoryDelegate {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
+}
+
+//MARK: Realm actions
+
+extension HistoryViewController {
     
     func addPage(url: String) {
         let newVisit = Visit()
